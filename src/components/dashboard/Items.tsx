@@ -1,6 +1,5 @@
 import { Box, Paper, styled } from "@mui/material";
 import React from "react";
-import { useTheme } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
