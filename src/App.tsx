@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../src/Material-UI/Theme/Theme";
 import Login from "./components/Login/Login";
+import Home from "./components/dashboard/Home";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/dashboard/*" element={<Home />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
