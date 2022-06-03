@@ -4,11 +4,8 @@ import { useTheme } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import SkipNextIcon from "@mui/icons-material/SkipNext";
+import Button from "@mui/material/Button";
 import pizza from "../../Assets/pizza.svg";
 import Grid from "@mui/material/Grid";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -20,6 +17,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
+import { useNavigate } from "react-router-dom";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -53,7 +51,7 @@ const Extras = [
 ];
 
 const Items = () => {
-  const theme = useTheme();
+  const navigate = useNavigate();
   const [pizzaSize, setPizzaSize] = React.useState("small");
   const [selectVeg, setSelectVeg] = React.useState({
     value: "",
@@ -67,6 +65,8 @@ const Items = () => {
   });
 
   const [toppings, setToppings] = React.useState<string[]>([]);
+
+  const [total, setTotal] = React.useState(0);
 
   const handleChangeToppings = (event: SelectChangeEvent<typeof toppings>) => {
     const {
@@ -354,9 +354,14 @@ const Items = () => {
               </Grid>
               <Grid item xs={4}>
                 <Item>
-                  <FormControl fullWidth>
+                  <FormControl
+                    disabled={
+                      selectVeg.value === "" && selectNonVeg.value === ""
+                    }
+                    fullWidth
+                  >
                     <InputLabel id="demo-multiple-checkbox-label">
-                      Select Toppings
+                      Extra Toppings
                     </InputLabel>
                     <Select
                       labelId="demo-multiple-checkbox-label"
@@ -376,11 +381,39 @@ const Items = () => {
                       ))}
                     </Select>
                   </FormControl>
+                  <h2>
+                    <ul>
+                      {toppings.map((val) => {
+                        return <li>{val}</li>;
+                      })}
+                    </ul>
+                  </h2>
+                  Extra Toppings : $1 each
                 </Item>
               </Grid>
             </Grid>
           </Box>
         </Box>
+        <Button
+          disabled={
+            (selectVeg.value === "" && selectNonVeg.value === "") ||
+            pizzaSize === null
+          }
+          sx={{ marginLeft: 2, marginTop: 5 }}
+          variant="outlined"
+          onClick={() =>
+            navigate("/dashboard/cart", {
+              state: {
+                size: pizzaSize,
+                veg: selectVeg,
+                nonVeg: selectNonVeg,
+                extras: toppings,
+              },
+            })
+          }
+        >
+          Checkout
+        </Button>
       </Box>
     </div>
   );
