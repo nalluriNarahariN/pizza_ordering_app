@@ -217,7 +217,13 @@ const Items = () => {
                   value="medium"
                 >
                   <Grid sx={{ paddingTop: 5 }} item xs={9}>
-                    <Card sx={{ display: "flex" }}>
+                    <Card
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                        padding: 2,
+                      }}
+                    >
                       <Box sx={{ display: "flex", flexDirection: "column" }}>
                         <CardContent sx={{ flex: "1 0 auto" }}>
                           <Typography component="div" variant="h5">
@@ -249,7 +255,13 @@ const Items = () => {
                   value="large"
                 >
                   <Grid sx={{ paddingTop: 5 }} item xs={9}>
-                    <Card sx={{ display: "flex" }}>
+                    <Card
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                        padding: 2,
+                      }}
+                    >
                       <Box sx={{ display: "flex", flexDirection: "column" }}>
                         <CardContent sx={{ flex: "1 0 auto" }}>
                           <Typography component="div" variant="h5">
@@ -398,20 +410,19 @@ const Items = () => {
             (selectVeg.value === "" && selectNonVeg.value === "") ||
             pizzaSize === null
           }
-          sx={{ marginLeft: 2, marginTop: 5 }}
-          variant="outlined"
+          sx={{ marginLeft: 2, marginTop: 5, marginBottom: 5 }}
+          variant="contained"
           onClick={() =>
             navigate("/dashboard/cart", {
               state: {
                 size: pizzaSize,
-                veg: selectVeg,
-                nonVeg: selectNonVeg,
+                pizzas: [selectVeg, selectNonVeg],
                 extras: toppings,
               },
             })
           }
         >
-          Checkout
+          Add to Cart
         </Button>
       </Box>
     </div>

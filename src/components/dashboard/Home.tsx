@@ -1,24 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@mui/styles";
 import { Routes } from "react-router-dom";
 import { Route, useNavigate, Link, useLocation } from "react-router-dom";
-import Collapse from "@mui/material/Collapse";
-import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import List from "@mui/material/List";
-import { Typography, Divider } from "@mui/material";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import logo1 from "../../Assets/logo1C.svg";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { deepOrange } from "@mui/material/colors";
-import { Theme } from "@mui/system";
-import { createTheme } from "@mui/material/styles";
+import bg from "../../Assets/bg.png";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Items from "./Items";
+import Cart from "../cart/Cart";
+import Appbar from "../Appbar/Appbar";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -30,10 +19,15 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Home = () => {
   return (
-    <div>
-      <Routes>
-        <Route path="items" element={<Items />} />
-      </Routes>
+    <Box>
+      <Appbar avatarName="NN" />
+      <Box sx={{ marginTop: 10 }}>
+        <Routes>
+          <Route path="items" element={<Items />} />
+          <Route path="cart" element={<Cart />} />
+        </Routes>
+      </Box>
+
       {/* <Box sx={{ width: 1 }}>
         <Box display="grid" gap={2}>
           <Box gridColumn="span 12">
@@ -44,7 +38,7 @@ const Home = () => {
           </Box>
         </Box>
       </Box> */}
-    </div>
+    </Box>
   );
 };
 
