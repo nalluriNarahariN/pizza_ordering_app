@@ -3,17 +3,7 @@ import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Container,
-  TextField,
-  Paper,
-  Snackbar,
-  Alert,
-  AlertTitle,
-} from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import useStyles from "../../Material-UI/MaterialUI_css";
 
 const Register = () => {
@@ -72,7 +62,9 @@ const Register = () => {
 
   return (
     <div style={{ cursor: loading ? "wait" : "default" }}>
-      <h2 className={classes.formBox}> Register </h2>
+      <Typography sx={{ padding: 2 }} variant="h4" textAlign="center">
+        Register
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="firstName"
