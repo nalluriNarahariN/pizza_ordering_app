@@ -4,7 +4,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../src/Material-UI/Theme/Theme";
 import Login from "./components/Login/Login";
 import Home from "./components/dashboard/Home";
-import Test from "./test";
+import Test from "./Test";
 
 function App() {
   return (
