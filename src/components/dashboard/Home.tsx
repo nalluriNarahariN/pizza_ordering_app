@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Routes } from "react-router-dom";
 import { Route, useNavigate, Link, useLocation } from "react-router-dom";
-import bg from "../../Assets/bg.png";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -19,9 +18,23 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Home = () => {
+  const navigate = useNavigate();
+  const [avatarName, setAvatarName] = useState("");
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem("userData") || "")) {
+      const userData = JSON.parse(localStorage.getItem("userData") || "");
+      setAvatarName(
+        `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`
+      );
+      // navigate("/dashboard/items");
+    } else {
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <Box>
-      <Appbar avatarName="NN" />
+      <Appbar avatarName={avatarName} />
       <Box sx={{ marginTop: 10 }}>
         <Routes>
           <Route path="items" element={<Items />} />

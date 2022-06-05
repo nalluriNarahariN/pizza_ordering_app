@@ -1,5 +1,5 @@
 import { Box, Paper, styled } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -17,6 +17,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -37,18 +38,6 @@ const MenuProps = {
   },
 };
 
-const Extras = [
-  "Grilled Mushroom",
-  "Crisp Capsicum",
-  "Fresh Tomato",
-  "Jalapeno",
-  "Golden Corn",
-  "Chicken Tikka",
-  "Chicken Pepperoni",
-  "Black Olives",
-  "Onion",
-];
-
 const Items = () => {
   const navigate = useNavigate();
   const [pizzaSize, setPizzaSize] = React.useState("small");
@@ -62,10 +51,31 @@ const Items = () => {
     description: "Please select a pizza to continue",
     img: "",
   });
-
   const [toppings, setToppings] = React.useState<string[]>([]);
+  const [selectVegJson, setSelectVegJson] = React.useState([
+    {
+      value: "",
+      description: "",
+      img: "",
+    },
+  ]);
+  const [selectNonVegJson, setSelectNonVegJson] = React.useState([
+    {
+      value: "",
+      description: "",
+      img: "",
+    },
+  ]);
+  const [Extras, setExtras] = React.useState([]);
 
-  const [total, setTotal] = React.useState(0);
+  useEffect(() => {
+    axios.get("http://localhost:3030/items/getInventoryItems").then((res) => {
+      let itemsArr = res.data.data.Items;
+      setSelectVegJson(itemsArr[0].veg);
+      setSelectNonVegJson(itemsArr[0].nonVeg);
+      setExtras(itemsArr[0].extras);
+    });
+  }, []);
 
   const handleChangeToppings = (event: SelectChangeEvent<typeof toppings>) => {
     const {
@@ -102,57 +112,29 @@ const Items = () => {
     setPizzaSize(newAlignment);
   };
 
-  const selectVegJson = [
-    {
-      value: "Margherita",
-      description: "Classic delight with 100% real mozzarella cheese",
-      img: "https://images.dominos.co.in/new_margherita_2502.jpg",
-    },
-    {
-      value: "Veg Extravaganza",
-      description:
-        "Black olives, capsicum, onion, grilled mushroom, corn, tomato, jalapeno & extra cheese",
-      img: "https://images.dominos.co.in/new_veg_extravaganza.jpg",
-    },
-    {
-      value: "Peppy Paneer",
-      description:
-        "Flavorful trio of juicy paneer, crisp capsicum with spicy red paprika",
-      img: "https://images.dominos.co.in/new_peppy_paneer.jpg",
-    },
-    {
-      value: "Farmhouse",
-      description:
-        "Delightful combination of onion, capsicum, tomato & grilled mushroom",
-      img: "https://images.dominos.co.in/farmhouse.png",
-    },
-  ];
-
-  const selectNonVegJson = [
-    {
-      value: "Chicken Dominator",
-      description:
-        "Loaded with double pepper barbecue chicken, peri-peri chicken, chicken tikka & grilled chicken rashers",
-      img: "https://images.dominos.co.in/new_chicken_dominator.jpg",
-    },
-    {
-      value: "Chicken Maximus",
-      description:
-        "Loaded to the Max with Chicken Tikka, Chicken Keema, Chicken Sausage and a double dose of grilled Chicken Rashers.",
-      img: "https://images.dominos.co.in/PIZ5158_1.jpg",
-    },
-    {
-      value: "Chicken Pepperoni",
-      description:
-        "A classic American taste! Relish the delectable flavor of Chicken Pepperoni, topped with extra cheese",
-      img: "https://images.dominos.co.in/cheesepepperoni.png",
-    },
-    {
-      value: "Pepper Barbecue Chicken",
-      description: "Pepper barbecue chicken for that extra zing",
-      img: "https://images.dominos.co.in/new_pepper_barbeque_chicken.jpg",
-    },
-  ];
+  const handleAddToCart = () => {
+    let userData = JSON.parse(localStorage.getItem("userData") || "{}");
+    let data = {
+      size: pizzaSize,
+      pizzas: [selectVeg, selectNonVeg],
+      extras: toppings,
+      email: userData.email,
+    };
+    console.log(data);
+    axios
+      .post("http://localhost:3030/cart/addToCart", data)
+      .then((res) => {
+        if (res.data.error === 0) {
+          navigate("/dashboard/cart");
+        } else {
+          alert(res.data.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      });
+  };
 
   return (
     <div>
@@ -413,13 +395,14 @@ const Items = () => {
           sx={{ marginLeft: 2, marginTop: 5, marginBottom: 5 }}
           variant="contained"
           onClick={() =>
-            navigate("/dashboard/cart", {
-              state: {
-                size: pizzaSize,
-                pizzas: [selectVeg, selectNonVeg],
-                extras: toppings,
-              },
-            })
+            // navigate("/dashboard/cart", {
+            //   state: {
+            //     size: pizzaSize,
+            //     pizzas: [selectVeg, selectNonVeg],
+            //     extras: toppings,
+            //   },
+            // })
+            handleAddToCart()
           }
         >
           Add to Cart

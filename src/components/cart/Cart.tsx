@@ -3,13 +3,16 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
+import { useWindowSize } from "usehooks-ts";
+import Confetti from "react-confetti";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -20,20 +23,68 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Cart = () => {
-  const location: any = useLocation();
-  const theme = useTheme();
-
+  const navigate = useNavigate();
+  const { width, height } = useWindowSize();
+  const [cartItems, setCartItems] = useState([
+    {
+      _id: "",
+      pizzas: [],
+      size: "",
+      extras: [],
+      email: "",
+    },
+  ]);
   const [total, setTotal] = useState(0);
+  const [confettiStatus, setConfettiStatus] = useState(false);
 
   useEffect(() => {
-    setTotal(
-      calculateTotal(
-        location.state.pizzas,
-        location.state.size,
-        location.state.extras.length
-      )
-    );
+    let userData = JSON.parse(localStorage.getItem("userData") || "{}");
+    axios
+      .post("http://localhost:3030/cart/getCartItems", {
+        email: userData.email,
+      })
+      .then((res) => {
+        if (res.data.error === 0) {
+          let items = res.data.data.myCartItems;
+          setCartItems(items);
+          setTotal(
+            calculateTotal(
+              items[0].pizzas,
+              items[0].size,
+              items[0].extras.length
+            )
+          );
+        } else {
+          alert(res.data.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      });
   }, []);
+
+  const handleBuyItems = () => {
+    let data: any = cartItems[0];
+    data.total = total;
+    data.id = data._id;
+    axios
+      .post("http://localhost:3030/transaction/buyItems", data)
+      .then((res) => {
+        if (res.data.error === 0) {
+          setConfettiStatus(true);
+          alert("Hurray! Item Bought");
+          setTimeout(() => navigate("/dashboard/items"), 3000);
+          // navigate("/dashboard/items");
+        } else {
+          alert(res.data.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      });
+  };
 
   const calculateTotal = (pizzas: any, size: string, extras: number) => {
     let sizeValue = 2;
@@ -66,8 +117,8 @@ const Cart = () => {
           <Grid item xs={8}>
             <Item>
               <h1>CART ITEMS</h1>
-              {location.state.pizzas
-                ? location.state.pizzas.map((val: any) => {
+              {cartItems.length > 0
+                ? cartItems[0].pizzas.map((val: any) => {
                     return (
                       <div>
                         {val.value ? (
@@ -97,7 +148,7 @@ const Cart = () => {
                                     alignItems: "center",
                                   }}
                                 >
-                                  {location.state.extras.map((value: any) => {
+                                  {cartItems[0].extras.map((value: any) => {
                                     return `${value}, `;
                                   })}
                                 </Typography>
@@ -112,16 +163,9 @@ const Cart = () => {
                 : "Loading"}
               <h2> TOTAL : $ {total} </h2>
               <Button
+                disabled={cartItems[0].pizzas.length === 0}
                 variant="contained"
-                // onClick={() =>
-                //   navigate("/dashboard/cart", {
-                //     state: {
-                //       size: pizzaSize,
-                //       pizzas: [selectVeg, selectNonVeg],
-                //       extras: toppings,
-                //     },
-                //   })
-                // }
+                onClick={() => handleBuyItems()}
               >
                 Buy Items
               </Button>
@@ -129,6 +173,7 @@ const Cart = () => {
           </Grid>
         </Grid>
       </Box>
+      <Confetti run={confettiStatus} width={width} height={height} />
     </div>
   );
 };
