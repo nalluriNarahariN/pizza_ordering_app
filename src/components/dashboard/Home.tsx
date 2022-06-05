@@ -8,6 +8,7 @@ import Paper from "@mui/material/Paper";
 import Items from "./Items";
 import Cart from "../cart/Cart";
 import Appbar from "../Appbar/Appbar";
+import Orders from "../MyOrders/Orders";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -25,6 +26,7 @@ const Home = () => {
         <Routes>
           <Route path="items" element={<Items />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="my-orders" element={<Orders />} />
         </Routes>
       </Box>
 
