@@ -39,7 +39,10 @@ const MenuProps = {
 };
 
 const Items = () => {
+  // hooks declaration
   const navigate = useNavigate();
+
+  // state initialization
   const [pizzaSize, setPizzaSize] = React.useState("small");
   const [selectVeg, setSelectVeg] = React.useState({
     value: "",
@@ -68,6 +71,7 @@ const Items = () => {
   ]);
   const [Extras, setExtras] = React.useState([]);
 
+  // use effect to get data from backend
   useEffect(() => {
     axios.get("http://localhost:3030/items/getInventoryItems").then((res) => {
       let itemsArr = res.data.data.Items;
@@ -77,6 +81,7 @@ const Items = () => {
     });
   }, []);
 
+  // func to set selected data
   const handleChangeToppings = (event: SelectChangeEvent<typeof toppings>) => {
     const {
       target: { value },
@@ -87,6 +92,7 @@ const Items = () => {
     );
   };
 
+  // func to set selected data
   const handleChangeSelect = (event: SelectChangeEvent) => {
     let obj = selectVegJson.find((o) => o.value === event.target.value);
     setSelectVeg({
@@ -96,6 +102,7 @@ const Items = () => {
     });
   };
 
+  // func to set selected data
   const handleChangeSelectNonVeg = (event: SelectChangeEvent) => {
     let obj = selectNonVegJson.find((o) => o.value === event.target.value);
     setSelectNonVeg({
@@ -105,6 +112,7 @@ const Items = () => {
     });
   };
 
+  // func to set selected data
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
     newAlignment: string
@@ -112,6 +120,7 @@ const Items = () => {
     setPizzaSize(newAlignment);
   };
 
+  // function to store cart items in db
   const handleAddToCart = () => {
     let userData = JSON.parse(localStorage.getItem("userData") || "{}");
     let data = {
@@ -394,16 +403,7 @@ const Items = () => {
           }
           sx={{ marginLeft: 2, marginTop: 5, marginBottom: 5 }}
           variant="contained"
-          onClick={() =>
-            // navigate("/dashboard/cart", {
-            //   state: {
-            //     size: pizzaSize,
-            //     pizzas: [selectVeg, selectNonVeg],
-            //     extras: toppings,
-            //   },
-            // })
-            handleAddToCart()
-          }
+          onClick={() => handleAddToCart()}
         >
           Add to Cart
         </Button>

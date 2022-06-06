@@ -46,6 +46,7 @@ const Register = () => {
   // declaring states
   const [loading, setLoading] = useState(false);
 
+  // react hook form submit function
   const onSubmit = (data: any) => {
     axios
       .post("http://localhost:3030/user/register", data)

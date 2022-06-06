@@ -39,9 +39,10 @@ const Login = () => {
   const classes = useStyles();
   // Used for hook form
   const { handleSubmit, control } = useForm();
-
+  // navigate hook
   const navigate = useNavigate();
 
+  // react hook form submit function
   const onSubmit = (data: any) => {
     axios
       .post("http://localhost:3030/user/login", data)

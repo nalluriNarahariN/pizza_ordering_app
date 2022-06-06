@@ -16,8 +16,6 @@ import { makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
 import { Theme } from "@mui/system";
 
-const drawerWidth = 260;
-
 const useStyles = makeStyles((theme: Theme) => ({
   orange: {
     color: theme.palette.getContrastText(deepOrange[500]),
@@ -27,8 +25,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
   },
   appBar: {
-    // width: `calc(100% - ${drawerWidth}px) !important`,
-    // marginLeft: drawerWidth,
     backgroundColor: "#328DFF",
     flexGrow: 1,
   },
@@ -41,12 +37,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const Appbar = (props: any) => {
+  // hooks declaration
   const classes = useStyles();
+  const navigate = useNavigate();
+
+  // state initialization
   const [avatarName, setAvatarName] = useState();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<any>(null);
-
-  const navigate = useNavigate();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -66,6 +64,7 @@ const Appbar = (props: any) => {
     }
   }
 
+  // function to logout
   const logout = () => {
     localStorage.clear();
     sessionStorage.clear();
@@ -82,6 +81,7 @@ const Appbar = (props: any) => {
     prevOpen.current = open;
   }, [open]);
 
+  // use effect to set avatar name
   useEffect(() => {
     setAvatarName(props.avatarName);
   }, [props.avatarName]);
@@ -91,7 +91,7 @@ const Appbar = (props: any) => {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography className={classes.toolbarTitle} variant="h2" noWrap>
-            PIZZERIAA
+            PIZZERIA
           </Typography>
           <Avatar
             role="button"

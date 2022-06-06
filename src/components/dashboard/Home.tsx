@@ -18,15 +18,19 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Home = () => {
+  // hooks declaration
   const navigate = useNavigate();
+
+  //state initialization
   const [avatarName, setAvatarName] = useState("");
+
+  // use effect to check if logged in and set avatar name
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("userData") || "")) {
       const userData = JSON.parse(localStorage.getItem("userData") || "");
       setAvatarName(
         `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`
       );
-      // navigate("/dashboard/items");
     } else {
       navigate("/login");
     }
@@ -42,17 +46,6 @@ const Home = () => {
           <Route path="my-orders" element={<Orders />} />
         </Routes>
       </Box>
-
-      {/* <Box sx={{ width: 1 }}>
-        <Box display="grid" gap={2}>
-          <Box gridColumn="span 12">
-            <Item>xs=8</Item>
-          </Box>
-          <Box gridColumn="span 12">
-            <Item>xs=8</Item>
-          </Box>
-        </Box>
-      </Box> */}
     </Box>
   );
 };

@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -23,8 +22,11 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Cart = () => {
+  // hooks declaration
   const navigate = useNavigate();
   const { width, height } = useWindowSize();
+
+  // state initialization
   const [cartItems, setCartItems] = useState([
     {
       _id: "",
@@ -37,6 +39,7 @@ const Cart = () => {
   const [total, setTotal] = useState(0);
   const [confettiStatus, setConfettiStatus] = useState(false);
 
+  // use effect to get data from backend
   useEffect(() => {
     let userData = JSON.parse(localStorage.getItem("userData") || "{}");
     axios
@@ -64,6 +67,7 @@ const Cart = () => {
       });
   }, []);
 
+  // function to buy cart items
   const handleBuyItems = () => {
     let data: any = cartItems[0];
     data.total = total;
@@ -86,6 +90,7 @@ const Cart = () => {
       });
   };
 
+  // func to calculate toal
   const calculateTotal = (pizzas: any, size: string, extras: number) => {
     let sizeValue = 2;
     let count = 0;

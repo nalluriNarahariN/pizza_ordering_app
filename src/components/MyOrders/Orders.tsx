@@ -8,7 +8,6 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import axios from "axios";
-import { valueToPercent } from "@mui/base";
 
 const Item = styled(Paper)(({ theme }) => ({
   // backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -18,64 +17,11 @@ const Item = styled(Paper)(({ theme }) => ({
   //   color: theme.palette.text.secondary,
 }));
 
-const ordersJson = [
-  {
-    extras: [
-      "Golden Corn",
-      "Chicken Tikka",
-      "Chicken Pepperoni",
-      "Black Olives",
-      "Onion",
-    ],
-    pizzas: [
-      {
-        value: "Veg Extravaganza",
-        description:
-          "Black olives, capsicum, onion, grilled mushroom, corn, tomato, jalapeno & extra cheese",
-        img: "https://images.dominos.co.in/new_veg_extravaganza.jpg",
-      },
-      {
-        value: "Chicken Maximus",
-        description:
-          "Loaded to the Max with Chicken Tikka, Chicken Keema, Chicken Sausage and a double dose of grilled Chicken Rashers.",
-        img: "https://images.dominos.co.in/PIZ5158_1.jpg",
-      },
-    ],
-    total: 26,
-    size: "large",
-    ID: 123,
-  },
-  {
-    extras: [
-      "Golden Corn",
-      "Chicken Tikka",
-      "Chicken Pepperoni",
-      "Black Olives",
-      "Onion",
-    ],
-    pizzas: [
-      {
-        value: "Veg Extravaganza",
-        description:
-          "Black olives, capsicum, onion, grilled mushroom, corn, tomato, jalapeno & extra cheese",
-        img: "https://images.dominos.co.in/new_veg_extravaganza.jpg",
-      },
-      {
-        value: "Chicken Maximus",
-        description:
-          "Loaded to the Max with Chicken Tikka, Chicken Keema, Chicken Sausage and a double dose of grilled Chicken Rashers.",
-        img: "https://images.dominos.co.in/PIZ5158_1.jpg",
-      },
-    ],
-    total: 26,
-    size: "large",
-    ID: 3123,
-  },
-];
-
 const Orders = () => {
+  // state initialization
   const [myOrders, setMyOrders] = useState([]);
 
+  // use effect to get previous orders from db
   useEffect(() => {
     let userData = JSON.parse(localStorage.getItem("userData") || "{}");
     axios
@@ -151,11 +97,6 @@ const Orders = () => {
                                             alignItems: "center",
                                           }}
                                         >
-                                          {/* {location.state.extras.map(
-                                                  (value: any) => {
-                                                    return `${value}, `;
-                                                  }
-                                                )} */}
                                           {val.description}
                                           <br />
                                           {valu.extras.map(
